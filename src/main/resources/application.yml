@@ -1,0 +1,11 @@
+server:
+  port: 7060
+spring:
+  application:
+    name: cloud-service-pay
+  zipkin:
+    base-url: http://localhost:7411
+eureka:
+  client:
+    service-url:
+      defaultZoone: http://localhost:8761/eureka/
