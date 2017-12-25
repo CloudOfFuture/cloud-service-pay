@@ -1,5 +1,7 @@
 package com.kunlun.service;
 
+import com.kunlun.entity.Delivery;
+import com.kunlun.entity.Good;
 import com.kunlun.result.DataRet;
 import com.kunlun.utils.WxUtil;
 import com.kunlun.wxentity.UnifiedRequestData;
@@ -39,10 +41,59 @@ public class PayServiceImpl implements PayService {
 
 
         //TODO 优惠券校验
-        //TODO 查询商品库存
+        String checkTicketUrl = "http://cloud-ribbon-server/api/ticket/checkTicket?useTicket=" + unifiedRequestData.getUseTicket() +
+                                                                                  "&ticketId=" + unifiedRequestData.getTicket() ;
+        String modifyTicketStatusUrl = "http://cloud-ribbon-server/api/ticket/modifyStatus?status=ALREADY_USED" +
+                                                                                         "&ticketId=" + unifiedRequestData.getTicket() ;
+        String ticketMsg = restTemplate.getForObject(checkTicketUrl,String.class);
+        //判断是否使用优惠券
+        if("1".equals(unifiedRequestData.getUseTicket())){
+            //判断优惠券是否可用
+            if(!StringUtils.isNullOrEmpty(ticketMsg)){
+                return new DataRet<>("Error",ticketMsg);
+            }else {
+                //优惠券使用
+             String userMsg = restTemplate.getForObject(modifyTicketStatusUrl,String.class);
+            }
+        }
+
+        //TODO 查询商品库存与商品信息
+        String getGoodUrl = "http://cloud-ribbon-server/api/good/findById?id="+unifiedRequestData.getGoodId();
+        Good good = restTemplate.getForObject(getGoodUrl,Good.class);
+        String goodMsg = checkGood(good,unifiedRequestData.getOrderFee(),unifiedRequestData.getCount());
+        if(!StringUtils.isNullOrEmpty(goodMsg)){
+            return new DataRet<>("Error",goodMsg);
+        }
+
         //TODO 查询收货地址
+        String getDelivey = "http://cloud-ribbon-server/api/delivey/findById?id="+unifiedRequestData.getDeliveryId();
+        Delivery delivery = restTemplate.getForObject(getDelivey,Delivery.class);
+
         //TODO 创建商品快照
         return null;
     }
+
+    /**
+     * 校验商品信息
+     * @param good
+     * @param orderFee
+     * @param count
+     * @return
+     */
+    private String checkGood(Good good, Integer orderFee, Integer count){
+        if(good==null||good.getStock() <= 0){
+            return "该商品库存不足";
+        }else if("UN_NORMA".equals(good.getStatus())){
+            return "该商品已下架";
+        }
+        //商品信息判断
+        int price = orderFee/count;
+        if(price!=good.getPrice()){
+            return "商品信息已过期,请重新下单";
+        }
+        return null;
+    }
+
+
 
 }
