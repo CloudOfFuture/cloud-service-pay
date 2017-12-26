@@ -39,6 +39,7 @@ public class PayServiceImpl implements PayService {
      * @return
      */
     @Override
+
     public DataRet<Object> unifiedOrder(UnifiedRequestData unifiedRequestData, String ipAddress) {
         String openid = WxUtil.getOpenId(unifiedRequestData.getWxCode());
         //积分校验
