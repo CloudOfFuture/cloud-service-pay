@@ -31,6 +31,7 @@ public class PayServiceImpl implements PayService {
     @Autowired
     private GoodClient goodClient;
 
+
     /**
      * 统一下单
      *
@@ -63,6 +64,7 @@ public class PayServiceImpl implements PayService {
 //        //TODO 查询收货地址
 //        String getDelivey = "http://cloud-ribbon-server/api/delivey/findById?id=" + unifiedRequestData.getDeliveryId();
 //        Delivery delivery = restTemplate.getForObject(getDelivey, Delivery.class);
+
 
         //TODO 创建商品快照
         return null;
