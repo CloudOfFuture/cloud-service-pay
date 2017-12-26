@@ -22,4 +22,16 @@ public class TicketClientHystrix implements TicketClient {
     public DataRet<String> checkTicket(String userTicket, Long ticketId) {
         return new DataRet<>("ERROR","优惠券校验接口异常");
     }
+
+    /**
+     * 修改用户优惠券状态
+     *
+     * @param id
+     * @param status
+     * @return
+     */
+    @Override
+    public DataRet<String> modifyStatus(Long id, String status) {
+        return new DataRet<>("ERROR","修改用户优惠券状态失败");
+    }
 }
