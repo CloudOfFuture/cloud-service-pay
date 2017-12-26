@@ -65,6 +65,7 @@ public class PayServiceImpl implements PayService {
 //        String getDelivey = "http://cloud-ribbon-server/api/delivey/findById?id=" + unifiedRequestData.getDeliveryId();
 //        Delivery delivery = restTemplate.getForObject(getDelivey, Delivery.class);
 
+
         //TODO 创建商品快照
         return null;
     }
