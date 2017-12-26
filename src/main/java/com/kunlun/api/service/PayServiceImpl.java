@@ -39,7 +39,6 @@ public class PayServiceImpl implements PayService {
      * @return
      */
     @Override
-
     public DataRet<Object> unifiedOrder(UnifiedRequestData unifiedRequestData, String ipAddress) {
         String openid = WxUtil.getOpenId(unifiedRequestData.getWxCode());
         //积分校验
@@ -61,9 +60,9 @@ public class PayServiceImpl implements PayService {
             return new DataRet<>("ERROR",goodRet.getMessage());
         }
 
-        //TODO 查询收货地址
-        String getDelivey = "http://cloud-ribbon-server/api/delivey/findById?id=" + unifiedRequestData.getDeliveryId();
-        Delivery delivery = restTemplate.getForObject(getDelivey, Delivery.class);
+//        //TODO 查询收货地址
+//        String getDelivey = "http://cloud-ribbon-server/api/delivey/findById?id=" + unifiedRequestData.getDeliveryId();
+//        Delivery delivery = restTemplate.getForObject(getDelivey, Delivery.class);
 
         //TODO 创建商品快照
         return null;
