@@ -1,4 +1,4 @@
-package com.kunlun.service;
+package com.kunlun.api.service;
 
 import com.kunlun.result.DataRet;
 import com.kunlun.wxentity.UnifiedRequestData;
