@@ -169,10 +169,16 @@ public class PayServiceImpl implements PayService {
             return new DataRet<>("ERROR",goodDataRet.getMessage());
         }
 
+        //生成签名
+        Long timeStamp = System.currentTimeMillis()/1000;
+        String nonceStr = WxUtil.createRandom(false,10);
+        Map<String,Object> map = WxSignUtil.payParam(timeStamp,nonceStr,order.getPrepayId());
+        String paySign = WxSignUtil.paySign(map);
+        map.put("paySign",paySign);
 
-
-        return null;
+        return new DataRet<>(JSON.toJSON(map));
     }
+
 
 
 
@@ -215,6 +221,10 @@ public class PayServiceImpl implements PayService {
         Long currentTime = System.currentTimeMillis();
         if(currentTime-createTime>= Constant.TIME_TWO_HOUR){
             //关闭订单
+            DataRet<String> closeOrderRet = orderClient.modifyOrderStatus(orderId,CommonEnum.CLOSING.getCode());
+            if(!closeOrderRet.isSuccess()){
+                return new DataRet<>("ERROR","订单支付超时,订单关闭失败");
+            }
             return new DataRet<>("ERROR","订单支付超时，请重新下单");
         }
         return new DataRet<>(order);
