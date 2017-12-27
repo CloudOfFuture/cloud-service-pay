@@ -24,7 +24,7 @@ public interface GoodClient {
      * @return
      */
     @GetMapping("/checkGood")
-    DataRet<String> checkGoodById(@RequestParam("goodId")Long goodId,
+    DataRet<Good> checkGoodById(@RequestParam("goodId")Long goodId,
                                   @RequestParam("count") Integer count,
                                   @RequestParam("orederFee") Integer orderFee);
 
