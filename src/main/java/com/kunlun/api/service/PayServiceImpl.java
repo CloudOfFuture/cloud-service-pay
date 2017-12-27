@@ -68,7 +68,7 @@ public class PayServiceImpl implements PayService {
 
 
         //商品信息校验
-        DataRet<String> goodRet = goodClient.checkGoodById(unifiedRequestData.getGoodId(),
+        DataRet<Good> goodRet = goodClient.checkGoodById(unifiedRequestData.getGoodId(),
                                                            unifiedRequestData.getCount(),
                                                            unifiedRequestData.getOrderFee());
         if(!goodRet.isSuccess()){
@@ -82,8 +82,7 @@ public class PayServiceImpl implements PayService {
         }
 
         //创建商品快照
-        Good good = goodClient.findById(unifiedRequestData.getGoodId()).getBody();
-        GoodSnapshot goodSnapshot = CommonUtil.snapshotConstructor(good,unifiedRequestData.getGoodId());
+        GoodSnapshot goodSnapshot = CommonUtil.snapshotConstructor(goodRet.getBody(),unifiedRequestData.getGoodId());
         DataRet<String> goodSnapShotRet = goodClient.addGoodSnapShot(goodSnapshot);//成功后,数据库新生成的id将赋值到goodSnapShot的id
         if(!goodSnapShotRet.isSuccess()){
             return new DataRet<>("ERROR",goodSnapShotRet.getMessage());
@@ -91,7 +90,7 @@ public class PayServiceImpl implements PayService {
 
         //TODO 构建订单
         Delivery delivery = deliveryClient.findById(unifiedRequestData.getDeliveryId()).getBody();
-        Order postOreder = CommonUtil.constructOrder(good, goodSnapshot.getId(),unifiedRequestData,delivery,openid);
+        Order postOreder = CommonUtil.constructOrder(goodRet.getBody(), goodSnapshot.getId(),unifiedRequestData,delivery,openid);
         DataRet<String> orderRet =  orderClient.addOrder(postOreder);
         if(!orderRet.isSuccess()){
             return new DataRet<>("ERROR",orderRet.getMessage());
@@ -105,7 +104,7 @@ public class PayServiceImpl implements PayService {
 
         //TODO 调用支付接口
         String nonce_str = WxUtil.createRandom(false,10);
-        String unifiedOrderXML = WxSignUtil.unifiedOrder(good.getGoodName(),openid,
+        String unifiedOrderXML = WxSignUtil.unifiedOrder(goodRet.getBody().getGoodName(),openid,
                                                          postOreder.getOrderNo(),
                                                          postOreder.getPaymentFee(),
                                                          nonce_str,"UNIFIED");

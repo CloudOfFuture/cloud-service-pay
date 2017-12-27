@@ -1,6 +1,7 @@
 package com.kunlun.api.hystrix;
 
 import com.kunlun.api.client.GoodClient;
+import com.kunlun.entity.Good;
 import com.kunlun.entity.GoodSnapshot;
 import com.kunlun.result.DataRet;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ public class GoodClientHystrix implements GoodClient {
      * @param orderFee @return
      */
     @Override
-    public DataRet<String> checkGoodById(Long goodId, Integer count, Integer orderFee) {
+    public DataRet<Good> checkGoodById(Long goodId, Integer count, Integer orderFee) {
         return new DataRet<>("ERROR","商品校验接口异常");
     }
 
