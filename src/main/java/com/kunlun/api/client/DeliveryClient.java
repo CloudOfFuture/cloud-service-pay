@@ -19,7 +19,7 @@ public interface DeliveryClient {
      * @param id
      * @return
      */
-    @GetMapping("/checkDelivery")
+    @GetMapping("/delivery/checkDelivery")
     DataRet<Delivery> checkDelivery(@RequestParam(value = "id") Long id);
 
     /**
@@ -27,6 +27,6 @@ public interface DeliveryClient {
      * @param id
      * @return
      */
-    @GetMapping("/findDetailById")
+    @GetMapping("/delivery/findDetailById")
     DataRet<Delivery> findById(@RequestParam(value = "id") Long id);
 }

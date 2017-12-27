@@ -1,14 +1,19 @@
 package com.kunlun.api.service;
 
+import com.alibaba.fastjson.JSON;
 import com.kunlun.api.client.*;
 import com.kunlun.entity.*;
 import com.kunlun.enums.CommonEnum;
+import com.kunlun.exception.PayException;
 import com.kunlun.result.DataRet;
 import com.kunlun.utils.*;
 import com.kunlun.wxentity.UnifiedOrderResponseData;
 import com.kunlun.wxentity.UnifiedRequestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author by kunlun
@@ -106,7 +111,7 @@ public class PayServiceImpl implements PayService {
             return new DataRet<>("ERROR",logRet.getMessage());
         }
 
-        //TODO 调用支付接口
+        //调用微信下单接口
         String nonce_str = WxUtil.createRandom(false,10);
         String unifiedOrderXML = WxSignUtil.unifiedOrder(goodRet.getBody().getGoodName(),openid,
                                                          postOreder.getOrderNo(),
@@ -119,21 +124,50 @@ public class PayServiceImpl implements PayService {
 
         if("FAIL".equalsIgnoreCase(unifiedOrderResponseData.getReturn_code())){
             //扔出微信下单错误
+            throw  new PayException(unifiedOrderResponseData.getReturn_msg());
         }
+
         //修改订单预付款订单号
         DataRet<String> prepayIdRet = orderClient.updateOrderPrepayId(postOreder.getId(),unifiedOrderResponseData.getPrepay_id());
         if(!prepayIdRet.isSuccess()){
             return new DataRet<>("ERROR","修改预付款订单号失败");
         }
 
+        //时间戳
+        Long timeStamp = System.currentTimeMillis()/1000;
+
+        //随机字符串
+        String nonceStr =  WxSignUtil.createRandom(false,10);
+
+        //生成字符签名
+        Map<String,Object> map = WxSignUtil.payParam(timeStamp,nonceStr,unifiedOrderResponseData.getPrepay_id());
+        String paySign = WxSignUtil.paySign(map);
+        map.put("paySign",paySign);
+        return new DataRet<>(JSON.toJSON(map));
+    }
 
 
+    /**
+     * 重新支付
+     * @param orderId
+     * @return
+     */
+    public DataRet<Object> rePay(Long orderId){
 
-
-
+        //Todo 校验订单信息
+        //Todo 校验商品信息
+        //Todo 订单超时处理
         return null;
     }
 
+    /**
+     * 组装订单日志
+     * @param orderNo
+     * @param action
+     * @param ipAddress
+     * @param orderId
+     * @return
+     */
     private OrderLog constructOrderLog(String orderNo,String action,String ipAddress,Long orderId){
             OrderLog orderLog = new OrderLog();
             orderLog.setOrderNo(orderNo);

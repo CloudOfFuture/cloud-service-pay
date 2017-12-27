@@ -20,7 +20,7 @@ public interface TicketClient {
      * @param ticketId
      * @return
      */
-    @GetMapping("/checkTicket")
+    @GetMapping("/ticket/checkTicket")
     DataRet<String> checkTicket(@RequestParam("useTicket") String userTicket, @RequestParam("ticketId") Long ticketId);
 
     /**
@@ -29,6 +29,6 @@ public interface TicketClient {
      * @param id
      * @return
      */
-    @GetMapping("/modifyStatus")
+    @GetMapping("/ticket/modifyStatus")
     DataRet<String> modifyStatus(@RequestParam(value = "id") Long id,@RequestParam(value = "status") String status);
 }

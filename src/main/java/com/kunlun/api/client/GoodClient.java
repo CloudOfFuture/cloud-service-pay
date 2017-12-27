@@ -23,7 +23,7 @@ public interface GoodClient {
      * @param goodId
      * @return
      */
-    @GetMapping("/checkGood")
+    @GetMapping("/backstage/good/checkGood")
     DataRet<Good> checkGoodById(@RequestParam("goodId")Long goodId,
                                   @RequestParam("count") Integer count,
                                   @RequestParam("orederFee") Integer orderFee);
@@ -34,7 +34,7 @@ public interface GoodClient {
      * @param id
      * @return
      */
-    @GetMapping("/findById")
+    @GetMapping("/backstage/good/findById")
     DataRet<Good> findById(@RequestParam(value = "id") Long id);
 
     /**
@@ -42,7 +42,7 @@ public interface GoodClient {
      * @param goodSnapshot
      * @return
      */
-    @PostMapping("/addGoodSnapShot")
+    @PostMapping("/wx/good/addGoodSnapShot")
     DataRet<String> addGoodSnapShot(@RequestBody GoodSnapshot goodSnapshot);
 
 }

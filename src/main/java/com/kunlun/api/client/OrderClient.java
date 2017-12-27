@@ -4,7 +4,9 @@ import com.kunlun.api.hystrix.OrderClientHystrix;
 import com.kunlun.entity.Order;
 import com.kunlun.result.DataRet;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author by hws
@@ -17,7 +19,7 @@ public interface OrderClient {
      * @param order
      * @return
      */
-    @PostMapping("/addOrder")
+    @PostMapping("/wx/order/addOrder")
     DataRet<String> addOrder(Order order);
 
     /**
@@ -26,7 +28,15 @@ public interface OrderClient {
      * @param prepayId
      * @return
      */
-    @PostMapping("/updatePrepayId")
+    @PostMapping("/wx/order/updatePrepayId")
     DataRet<String> updateOrderPrepayId(Long id,String prepayId);
+
+    /**
+     * 根据id查找订单详情
+     * @param id
+     * @return
+     */
+    @GetMapping("/wx/order/findById")
+    DataRet<Order> findOrderById(@RequestParam(value = "id") Long id);
 }
 

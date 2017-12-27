@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface PointClient {
 
 
-    @GetMapping("/checkPoint")
+    @GetMapping("/point/checkPoint")
     DataRet<String> checkPoint(@RequestParam("pointValue") Integer pointValue,
                                @RequestParam("openid") String openid);
 }
