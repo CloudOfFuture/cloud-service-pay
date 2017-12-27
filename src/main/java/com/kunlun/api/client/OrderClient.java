@@ -6,6 +6,7 @@ import com.kunlun.result.DataRet;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -20,7 +21,7 @@ public interface OrderClient {
      * @return
      */
     @PostMapping("/wx/order/addOrder")
-    DataRet<String> addOrder(Order order);
+    DataRet<String> addOrder(@RequestBody Order order);
 
     /**
      * 修改预付款订单号
@@ -29,15 +30,15 @@ public interface OrderClient {
      * @return
      */
     @PostMapping("/wx/order/updatePrepayId")
-    DataRet<String> updateOrderPrepayId(Long id,String prepayId);
+    DataRet<String> updateOrderPrepayId(@RequestParam("id") Long id,@RequestParam("prepayId") String prepayId);
 
     /**
      * 根据id查找订单详情
-     * @param id
+     * @param orderId
      * @return
      */
     @GetMapping("/wx/order/findById")
-    DataRet<Order> findOrderById(@RequestParam(value = "id") Long id);
+    DataRet<Order> findOrderById(@RequestParam(value = "orderId") Long orderId);
 
     /**
      * 修改订单状态

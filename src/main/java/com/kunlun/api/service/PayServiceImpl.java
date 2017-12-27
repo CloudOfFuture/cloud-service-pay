@@ -207,7 +207,7 @@ public class PayServiceImpl implements PayService {
     private DataRet<Order> checkOrder(Long orderId){
         DataRet<Order> orderDataRet = orderClient.findOrderById(orderId);
         if(!orderDataRet.isSuccess()){
-            return new DataRet<>("ERROR","订单不存在");
+            return new DataRet<>("ERROR",orderDataRet.getMessage());
         }
 
         Order order = orderDataRet.getBody();
