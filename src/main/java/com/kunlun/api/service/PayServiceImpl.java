@@ -4,9 +4,8 @@ import com.kunlun.api.client.*;
 import com.kunlun.entity.*;
 import com.kunlun.enums.CommonEnum;
 import com.kunlun.result.DataRet;
-import com.kunlun.utils.CommonUtil;
-import com.kunlun.utils.WxSignUtil;
-import com.kunlun.utils.WxUtil;
+import com.kunlun.utils.*;
+import com.kunlun.wxentity.UnifiedOrderResponseData;
 import com.kunlun.wxentity.UnifiedRequestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -110,6 +109,22 @@ public class PayServiceImpl implements PayService {
                                                          postOreder.getOrderNo(),
                                                          postOreder.getPaymentFee(),
                                                          nonce_str,"UNIFIED");
+        //调用微信统一下单接口,生成预付款订单
+        String wxOrderResponse = WxUtil.httpsRequest(WxPayConstant.WECHAT_UNIFIED_ORDER_URL,"POST",unifiedOrderXML);
+        //将xml返回信息转换成bean
+        UnifiedOrderResponseData unifiedOrderResponseData = XmlUtil.castXMLStringToUnifiedOrderResponseData(wxOrderResponse);
+
+        if("FAIL".equalsIgnoreCase(unifiedOrderResponseData.getReturn_code())){
+            //扔出微信下单错误
+        }
+        //修改订单预付款订单号
+        DataRet<String> prepayIdRet = orderClient.updateOrderPrepayId(postOreder.getId(),unifiedOrderResponseData.getPrepay_id());
+        if(!prepayIdRet.isSuccess()){
+            return new DataRet<>("ERROR","修改预付款订单号失败");
+        }
+
+
+
 
 
 

@@ -21,4 +21,16 @@ public class OrderClientHystrix implements OrderClient{
     public DataRet<String> addOrder(Order order) {
         return new DataRet<>("ERROR","新增订单发生异常");
     }
+
+    /**
+     * 修改预付款订单号
+     *
+     * @param id
+     * @param prepayId
+     * @return
+     */
+    @Override
+    public DataRet<String> updateOrderPrepayId(Long id, String prepayId) {
+        return new DataRet<>("ERROR","修改预付款订单号发生异常");
+    }
 }

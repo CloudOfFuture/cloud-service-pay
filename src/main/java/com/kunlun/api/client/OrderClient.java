@@ -19,4 +19,14 @@ public interface OrderClient {
      */
     @PostMapping("/addOrder")
     DataRet<String> addOrder(Order order);
+
+    /**
+     * 修改预付款订单号
+     * @param id
+     * @param prepayId
+     * @return
+     */
+    @PostMapping("/updatePrepayId")
+    DataRet<String> updateOrderPrepayId(Long id,String prepayId);
 }
+
