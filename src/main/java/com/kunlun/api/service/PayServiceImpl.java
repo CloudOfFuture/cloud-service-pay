@@ -76,7 +76,7 @@ public class PayServiceImpl implements PayService {
         }
 
         //查询收货地址
-        DataRet<String> deliveryRet = deliveryClient.checkDelivery(unifiedRequestData.getDeliveryId());
+        DataRet<Delivery> deliveryRet = deliveryClient.checkDelivery(unifiedRequestData.getDeliveryId());
         if(!deliveryRet.isSuccess()){
             return new DataRet<>("ERROR",deliveryRet.getMessage());
         }
@@ -88,14 +88,18 @@ public class PayServiceImpl implements PayService {
             return new DataRet<>("ERROR",goodSnapShotRet.getMessage());
         }
 
-        //TODO 构建订单
-        Delivery delivery = deliveryClient.findById(unifiedRequestData.getDeliveryId()).getBody();
-        Order postOreder = CommonUtil.constructOrder(goodRet.getBody(), goodSnapshot.getId(),unifiedRequestData,delivery,openid);
+        //构建订单
+        Order postOreder = CommonUtil.constructOrder(goodRet.getBody(),
+                                                     goodSnapshot.getId(),
+                                                     unifiedRequestData,
+                                                     deliveryRet.getBody(),
+                                                      openid);
         DataRet<String> orderRet =  orderClient.addOrder(postOreder);
         if(!orderRet.isSuccess()){
             return new DataRet<>("ERROR",orderRet.getMessage());
         }
-        //TODO 生成订单日志
+
+        //生成订单日志
         OrderLog orderLog = constructOrderLog(postOreder.getOrderNo(),"生成预付款订单",ipAddress,postOreder.getId());
         DataRet<String> logRet = logClient.addOrderLog(orderLog);
         if(!logRet.isSuccess()){

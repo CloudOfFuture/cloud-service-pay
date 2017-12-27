@@ -1,6 +1,7 @@
 package com.kunlun.api.hystrix;
 
 import com.kunlun.api.client.DeliveryClient;
+import com.kunlun.entity.Delivery;
 import com.kunlun.result.DataRet;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ public class DeliveryClientHystrix implements DeliveryClient {
      * @return
      */
     @Override
-    public DataRet checkDelivery(Long id) {
+    public DataRet<Delivery> checkDelivery(Long id) {
         return new DataRet("Error","收获地址校验异常");
     }
 
@@ -28,7 +29,7 @@ public class DeliveryClientHystrix implements DeliveryClient {
      * @return
      */
     @Override
-    public DataRet findById(Long id) {
+    public DataRet<Delivery> findById(Long id) {
         return new DataRet("ERROR","获取收货地址异常");
     }
 }
