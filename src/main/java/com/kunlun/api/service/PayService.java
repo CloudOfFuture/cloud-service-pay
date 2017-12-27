@@ -19,4 +19,11 @@ public interface PayService {
      */
     DataRet<Object> unifiedOrder(UnifiedRequestData unifiedRequestData, String ipAddress);
 
+    /**
+     * 重新支付
+     * @param id
+     * @return
+     */
+    DataRet<Object> repay(Long id);
+
 }

@@ -44,4 +44,16 @@ public class OrderClientHystrix implements OrderClient{
     public DataRet<Order> findOrderById(Long id) {
         return new DataRet<>("ERROR","查找订单详情异常");
     }
+
+    /**
+     * 修改订单状态
+     *
+     * @param id
+     * @param status
+     * @return
+     */
+    @Override
+    public DataRet<String> modifyOrderStatus(Long id, String status) {
+        return new DataRet<>("ERROR","修改订单状态发生异常");
+    }
 }

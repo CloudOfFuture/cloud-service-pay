@@ -38,5 +38,15 @@ public interface OrderClient {
      */
     @GetMapping("/wx/order/findById")
     DataRet<Order> findOrderById(@RequestParam(value = "id") Long id);
+
+    /**
+     * 修改订单状态
+     * @param id
+     * @param status
+     * @return
+     */
+    @PostMapping("/backend/order/modifyStatus")
+    DataRet<String> modifyOrderStatus(@RequestParam(value = "id") Long id,
+                                      @RequestParam(value = "status") String status);
 }
 

@@ -2,6 +2,7 @@ package com.kunlun.api.service;
 
 import com.alibaba.fastjson.JSON;
 import com.kunlun.api.client.*;
+import com.kunlun.constant.Constant;
 import com.kunlun.entity.*;
 import com.kunlun.enums.CommonEnum;
 import com.kunlun.exception.PayException;
@@ -139,26 +140,41 @@ public class PayServiceImpl implements PayService {
         //随机字符串
         String nonceStr =  WxSignUtil.createRandom(false,10);
 
-        //生成字符签名
+        //生成支付签名
         Map<String,Object> map = WxSignUtil.payParam(timeStamp,nonceStr,unifiedOrderResponseData.getPrepay_id());
         String paySign = WxSignUtil.paySign(map);
         map.put("paySign",paySign);
         return new DataRet<>(JSON.toJSON(map));
     }
 
-
     /**
      * 重新支付
-     * @param orderId
+     *
+     * @param id
      * @return
      */
-    public DataRet<Object> rePay(Long orderId){
+    @Override
+    public DataRet<Object> repay(Long id) {
+        // 校验订单信息
+        DataRet<Order> orderDataRet = checkOrder(id);
+        if(!orderDataRet.isSuccess()){
+            return new DataRet("ERROR",orderDataRet.getMessage());
+        }
+        //初始化订单实例
+        Order order = orderDataRet.getBody();
 
-        //Todo 校验订单信息
-        //Todo 校验商品信息
-        //Todo 订单超时处理
+        //校验商品信息
+        DataRet<Good> goodDataRet = goodClient.checkGoodById(order.getGoodId(),0,0);
+        if(!goodDataRet.isSuccess()){
+            return new DataRet<>("ERROR",goodDataRet.getMessage());
+        }
+
+
+
         return null;
     }
+
+
 
     /**
      * 组装订单日志
@@ -177,4 +193,30 @@ public class PayServiceImpl implements PayService {
             return orderLog;
     }
 
+    /**
+     * 校验订单信息
+     * @param orderId
+     * @return
+     */
+    private DataRet<Order> checkOrder(Long orderId){
+        DataRet<Order> orderDataRet = orderClient.findOrderById(orderId);
+        if(!orderDataRet.isSuccess()){
+            return new DataRet<>("ERROR","订单不存在");
+        }
+
+        Order order = orderDataRet.getBody();
+
+        if(CommonEnum.UN_PAY.getCode().equalsIgnoreCase(order.getOrderStatus())){
+            return new DataRet<>("ERROR","订单状态异常");
+        }
+
+        //订单超时处理
+        Long createTime = order.getCreateDate().getTime();
+        Long currentTime = System.currentTimeMillis();
+        if(currentTime-createTime>= Constant.TIME_TWO_HOUR){
+            //关闭订单
+            return new DataRet<>("ERROR","订单支付超时，请重新下单");
+        }
+        return new DataRet<>(order);
+    }
 }

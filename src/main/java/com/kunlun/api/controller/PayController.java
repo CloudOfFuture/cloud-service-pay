@@ -5,10 +5,7 @@ import com.kunlun.api.service.PayService;
 import com.kunlun.utils.IpUtil;
 import com.kunlun.wxentity.UnifiedRequestData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,6 +34,16 @@ public class PayController {
         String ipAddress = IpUtil.getIPAddress(request);
 
         return payService.unifiedOrder(unifiedRequestData, ipAddress);
+    }
+
+    /**重新支付
+     *
+     * @param orderId
+     * @return
+     */
+    @PostMapping("/order/repay")
+    public DataRet<Object> repay(@RequestParam(value = "orderId") Long orderId){
+        return payService.repay(orderId);
     }
 
 
