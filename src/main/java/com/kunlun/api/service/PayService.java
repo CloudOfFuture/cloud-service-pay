@@ -1,6 +1,7 @@
 package com.kunlun.api.service;
 
 import com.kunlun.result.DataRet;
+import com.kunlun.wxentity.UnifiedOrderNotifyRequestData;
 import com.kunlun.wxentity.UnifiedRequestData;
 
 /**
@@ -25,5 +26,12 @@ public interface PayService {
      * @return
      */
     DataRet<Object> repay(Long id);
+
+    /**
+     * 支付成功回调
+     * @param unifiedOrderNotifyRequestData
+     * @return
+     */
+    DataRet<String> payCallBack(UnifiedOrderNotifyRequestData unifiedOrderNotifyRequestData);
 
 }

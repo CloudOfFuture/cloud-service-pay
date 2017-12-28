@@ -49,5 +49,25 @@ public interface OrderClient {
     @PostMapping("/backend/order/modifyStatus")
     DataRet<String> modifyOrderStatus(@RequestParam(value = "id") Long id,
                                       @RequestParam(value = "status") String status);
+
+    /**
+     * 根据订单号查找订单
+     * @param orderNo
+     * @return
+     */
+    @GetMapping("/backend/order/findByOrderNo")
+    DataRet<Order> findOrderByOrderNo(@RequestParam(value = "orderNo") String orderNo);
+
+    /**
+     * 修改订单状态和支付订单号
+     * @param id
+     * @param status
+     * @param wxOrderNo
+     * @return
+     */
+    @PostMapping("/backend/order/modifyStatusAndPayOrderNo")
+    DataRet<String>modifyStatusAndPayOrderNo(@RequestParam(value = "id") Long id,
+                                             @RequestParam(value = "status") String status,
+                                             @RequestParam(value = "wxOrderNo") String wxOrderNo);
 }
 

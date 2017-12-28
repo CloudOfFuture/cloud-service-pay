@@ -8,6 +8,7 @@ import com.kunlun.enums.CommonEnum;
 import com.kunlun.exception.PayException;
 import com.kunlun.result.DataRet;
 import com.kunlun.utils.*;
+import com.kunlun.wxentity.UnifiedOrderNotifyRequestData;
 import com.kunlun.wxentity.UnifiedOrderResponseData;
 import com.kunlun.wxentity.UnifiedRequestData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,8 +179,30 @@ public class PayServiceImpl implements PayService {
         return new DataRet<>(JSON.toJSON(map));
     }
 
+    /**
+     * 支付成功回调
+     *
+     * @param unifiedOrderNotifyRequestData
+     * @return
+     */
+    @Override
+    public DataRet<String> payCallBack(UnifiedOrderNotifyRequestData unifiedOrderNotifyRequestData) {
+        //校验订单信息
+        DataRet<Order> orderRet = orderClient.findOrderByOrderNo(unifiedOrderNotifyRequestData.getOut_trade_no());
+        if(!orderRet.isSuccess()){
+            return new DataRet<>("ERROR",orderRet.getMessage());
+        }
+
+        Order order = orderRet.getBody();
+        if(order.getPayDate()==null&&CommonEnum.UN_PAY.getCode().equals(order.getOrderStatus())){
+            //修改订单状态与微信支付订单号
 
 
+        }
+
+        //校验
+        return null;
+    }
 
 
     /**
