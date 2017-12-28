@@ -47,5 +47,9 @@ public class PayController {
     }
 
 
+    @PostMapping("/order/payCallback")
+    public void pay(){
+
+    }
 
 }

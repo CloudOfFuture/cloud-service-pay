@@ -4,8 +4,14 @@ spring:
   application:
     name: cloud-service-pay
   zipkin:
-    base-url: http://localhost:7411
+    base-url: http://localhost:9411
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+hystrix:
+  default:
+    execution:
+      isolation:
+        thread:
+          timeoutInMilliseconds: 5000  #命令超时时间 默认1000ms
