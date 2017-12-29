@@ -3,6 +3,7 @@ package com.kunlun.api.client;
 import com.kunlun.api.hystrix.LogClientHystrix;
 import com.kunlun.entity.GoodLog;
 import com.kunlun.entity.OrderLog;
+import com.kunlun.entity.PointLog;
 import com.kunlun.result.DataRet;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,4 +31,12 @@ public interface LogClient {
      */
     @PostMapping("/log/add/goodLog")
     DataRet<String> addGoodLog(@RequestBody GoodLog goodLog);
+
+    /**
+     * 创建积分日志
+     * @param pointLog
+     * @return
+     */
+    @PostMapping("/log/add/pointLog")
+    DataRet<String> addPointLog(@RequestBody PointLog pointLog);
 }

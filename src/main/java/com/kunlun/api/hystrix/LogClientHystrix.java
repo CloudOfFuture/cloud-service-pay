@@ -3,6 +3,7 @@ package com.kunlun.api.hystrix;
 import com.kunlun.api.client.LogClient;
 import com.kunlun.entity.GoodLog;
 import com.kunlun.entity.OrderLog;
+import com.kunlun.entity.PointLog;
 import com.kunlun.result.DataRet;
 import org.springframework.stereotype.Component;
 
@@ -33,5 +34,16 @@ public class LogClientHystrix implements LogClient{
     @Override
     public DataRet<String> addGoodLog(GoodLog goodLog) {
         return new DataRet<String>("ERROR","创建商品日志失败");
+    }
+
+    /**
+     * 创建积分日志
+     *
+     * @param pointLog
+     * @return
+     */
+    @Override
+    public DataRet<String> addPointLog(PointLog pointLog) {
+        return new DataRet<>("ERROR","创建积分日志出现异常");
     }
 }

@@ -48,4 +48,16 @@ public class GoodClientHystrix implements GoodClient {
     public DataRet addGoodSnapShot(GoodSnapshot goodSnapshot) {
         return new DataRet("Error","商品快照新增失败");
     }
+
+    /**
+     * 修改商品库存
+     *
+     * @param id
+     * @param count
+     * @return
+     */
+    @Override
+    public DataRet<String> updateGoodStock(Long id, Integer count) {
+        return new DataRet<>("ERROR","修改商品库存发生异常");
+    }
 }

@@ -208,26 +208,34 @@ public class PayServiceImpl implements PayService {
             if(!orderLogRet.isSuccess()){
                 return new DataRet<>("ERROR",orderLogRet.getMessage());
             }
-            //TODO:库存并扣减
+            //库存扣减
             Integer reduceCount = -1 * order.getCount();
             DataRet<String> goodStockRet = goodClient.updateGoodStock(order.getGoodId(),reduceCount);
             if(!goodStockRet.isSuccess()){
                 return new DataRet<>("ERROR",goodStockRet.getMessage());
             }
-            GoodLog goodLog = CommonUtil.constructGoodLog(order.getGoodId(),order.getGoodName(),"库存扣减{}"+order.getCount());
-            //TODO:积分校验并扣减
+            //创建商品库存扣减日志
+            GoodLog goodLog = CommonUtil.constructGoodLog(order.getGoodId(),order.getGoodName(),"库存扣减"+order.getCount());
+            DataRet<String> goodLogRet = logClient.addGoodLog(goodLog);
 
+            //积分扣减
+            DataRet<String> pointRet = pointClient.updatePoint(order.getOperatePoint(),order.getUserId());
+            if(!pointRet.isSuccess()){
+                return new DataRet<>("ERROR",pointRet.getMessage());
+            }
+            //获取当前积分
+            DataRet<Point> currentPointRet = pointClient.findPointByUserId(order.getUserId());
+            if(!currentPointRet.isSuccess()){
+                return new DataRet<>("ERROR",currentPointRet.getMessage());
+            }
+            //积分扣减日志构建
+            PointLog pointLog = CommonUtil.constructPointLog(order.getUserId(),order.getOperatePoint(),currentPointRet.getBody().getPoint());
+            DataRet<String> pointLogRet = logClient.addPointLog(pointLog);
         }
 
         //校验
         return null;
     }
-
-
-    public static void main(String[] args){
-
-    }
-
 
     /**
      * 校验订单信息
