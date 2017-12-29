@@ -11,6 +11,7 @@ import com.kunlun.utils.*;
 import com.kunlun.wxentity.UnifiedOrderNotifyRequestData;
 import com.kunlun.wxentity.UnifiedOrderResponseData;
 import com.kunlun.wxentity.UnifiedRequestData;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -107,7 +108,7 @@ public class PayServiceImpl implements PayService {
         }
 
         //生成订单日志
-        OrderLog orderLog = constructOrderLog(postOreder.getOrderNo(),"生成预付款订单",ipAddress,postOreder.getId());
+        OrderLog orderLog =CommonUtil.constructOrderLog(postOreder.getOrderNo(),"生成预付款订单",ipAddress,postOreder.getId());
         DataRet<String> logRet = logClient.addOrderLog(orderLog);
         if(!logRet.isSuccess()){
             return new DataRet<>("ERROR",logRet.getMessage());
@@ -196,7 +197,25 @@ public class PayServiceImpl implements PayService {
         Order order = orderRet.getBody();
         if(order.getPayDate()==null&&CommonEnum.UN_PAY.getCode().equals(order.getOrderStatus())){
             //修改订单状态与微信支付订单号
-
+            DataRet<String> orderModifyRet = orderClient.modifyStatusAndPayOrderNo(order.getId(),
+                    CommonEnum.UN_DELIVERY.getCode(),unifiedOrderNotifyRequestData.getTransaction_id());
+            if(!orderModifyRet.isSuccess()){
+                return new DataRet<>("ERROR",orderModifyRet.getMessage());
+            }
+            //修改订单日志
+            OrderLog orderLog = CommonUtil.constructOrderLog(order.getOrderNo(),"付款","",order.getId());
+            DataRet<String> orderLogRet = logClient.addOrderLog(orderLog);
+            if(!orderLogRet.isSuccess()){
+                return new DataRet<>("ERROR",orderLogRet.getMessage());
+            }
+            //TODO:库存并扣减
+            Integer reduceCount = -1 * order.getCount();
+            DataRet<String> goodStockRet = goodClient.updateGoodStock(order.getGoodId(),reduceCount);
+            if(!goodStockRet.isSuccess()){
+                return new DataRet<>("ERROR",goodStockRet.getMessage());
+            }
+            GoodLog goodLog = CommonUtil.constructGoodLog(order.getGoodId(),order.getGoodName(),"库存扣减{}"+order.getCount());
+            //TODO:积分校验并扣减
 
         }
 
@@ -205,22 +224,10 @@ public class PayServiceImpl implements PayService {
     }
 
 
-    /**
-     * 组装订单日志
-     * @param orderNo
-     * @param action
-     * @param ipAddress
-     * @param orderId
-     * @return
-     */
-    private OrderLog constructOrderLog(String orderNo,String action,String ipAddress,Long orderId){
-            OrderLog orderLog = new OrderLog();
-            orderLog.setOrderNo(orderNo);
-            orderLog.setAction(action);
-            orderLog.setIpAddress(ipAddress);
-            orderLog.setOrderId(orderId);
-            return orderLog;
+    public static void main(String[] args){
+
     }
+
 
     /**
      * 校验订单信息

@@ -45,4 +45,15 @@ public interface GoodClient {
     @PostMapping("/wx/good/addGoodSnapShot")
     DataRet<String> addGoodSnapShot(@RequestBody GoodSnapshot goodSnapshot);
 
+
+    /**
+     * 修改商品库存
+     * @param id
+     * @param count
+     * @return
+     */
+    @PostMapping("/seller/good/updateGoodStock")
+    DataRet<String> updateGoodStock(@RequestParam(value = "id") Long id,
+                                    @RequestParam(value = "count") Integer count);
+
 }

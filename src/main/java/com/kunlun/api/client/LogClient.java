@@ -1,6 +1,7 @@
 package com.kunlun.api.client;
 
 import com.kunlun.api.hystrix.LogClientHystrix;
+import com.kunlun.entity.GoodLog;
 import com.kunlun.entity.OrderLog;
 import com.kunlun.result.DataRet;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -21,4 +22,12 @@ public interface LogClient {
      */
     @PostMapping("/log/add/orderLog")
     DataRet<String> addOrderLog(@RequestBody OrderLog orderLog);
+
+    /**
+     * 创建商品日志
+     * @param goodLog
+     * @return
+     */
+    @PostMapping("/log/add/goodLog")
+    DataRet<String> addGoodLog(@RequestBody GoodLog goodLog);
 }
