@@ -234,7 +234,7 @@ public class PayServiceImpl implements PayService {
         }
 
         //校验
-        return null;
+        return new DataRet<>("支付成功");
     }
 
     /**

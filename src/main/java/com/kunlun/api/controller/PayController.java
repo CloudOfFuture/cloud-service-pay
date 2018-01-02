@@ -73,6 +73,7 @@ public class PayController {
         }catch (IOException e){
             e.printStackTrace();
         }
+
         //将xml字符串转换成统一下单请求对象
         UnifiedOrderNotifyRequestData unifiedOrderNotifyRequestData = XmlUtil.castXMLStringToUnifiedOrderNotifyRequestData(
                 notifyXml.toString());
@@ -80,7 +81,14 @@ public class PayController {
             LOGGER.error("@微信错误-----"+unifiedOrderNotifyRequestData.getReturn_msg());
             return;
         }
-        //支付成功回调
+
+        //支付成功回调函数
+        DataRet<String> callbackRet = payService.payCallBack(unifiedOrderNotifyRequestData);
+        if(!callbackRet.isSuccess()){
+            return;
+        }
+
+        //通知微信端成功处理支付
 
 
     }
