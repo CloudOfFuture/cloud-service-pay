@@ -232,7 +232,7 @@ public class PayServiceImpl implements PayService {
             PointLog pointLog = CommonUtil.constructPointLog(order.getUserId(),order.getOperatePoint(),currentPointRet.getBody().getPoint());
             DataRet<String> pointLogRet = logClient.addPointLog(pointLog);
         }
-
+//        TODO:
         //校验
         return new DataRet<>("支付成功");
     }
