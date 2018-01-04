@@ -4,9 +4,11 @@ import ch.qos.logback.core.joran.spi.XMLUtil;
 import com.kunlun.result.DataRet;
 import com.kunlun.api.service.PayService;
 import com.kunlun.utils.IpUtil;
+import com.kunlun.utils.WxPayConstant;
 import com.kunlun.utils.WxUtil;
 import com.kunlun.utils.XmlUtil;
 import com.kunlun.wxentity.UnifiedOrderNotifyRequestData;
+import com.kunlun.wxentity.UnifiedOrderNotifyResponseData;
 import com.kunlun.wxentity.UnifiedRequestData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +75,7 @@ public class PayController {
         }catch (IOException e){
             e.printStackTrace();
         }
+
         //将xml字符串转换成统一下单请求对象
         UnifiedOrderNotifyRequestData unifiedOrderNotifyRequestData = XmlUtil.castXMLStringToUnifiedOrderNotifyRequestData(
                 notifyXml.toString());
@@ -80,9 +83,20 @@ public class PayController {
             LOGGER.error("@微信错误-----"+unifiedOrderNotifyRequestData.getReturn_msg());
             return;
         }
-        //支付成功回调
 
+        //支付成功回调函数
+        DataRet<String> callbackRet = payService.payCallBack(unifiedOrderNotifyRequestData);
+        if(!callbackRet.isSuccess()){
+            return;
+        }
 
+        //通知微信端成功处理支付
+        UnifiedOrderNotifyResponseData unifiedOrderNotifyResponseData = new UnifiedOrderNotifyResponseData();
+        unifiedOrderNotifyResponseData.setReturn_code("SUCCESS");
+        unifiedOrderNotifyResponseData.setReturn_msg("OK");
+        String responseXML = XmlUtil.castDataToXMLString(unifiedOrderNotifyResponseData);
+        //通知微信回调成功
+        WxUtil.httpsRequest(WxPayConstant.WECHAT_UNIFIED_ORDER_URL,"POST",responseXML);
     }
 
 
