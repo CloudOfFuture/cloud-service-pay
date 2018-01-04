@@ -30,12 +30,11 @@ public class ActivityClientHystrix implements ActivityClient{
     /**
      * 校验活动商品
      *
-     * @param activityId
      * @param goodId
      * @return
      */
     @Override
-    public DataRet<String> checkActivityGood(Long activityId, Long goodId) {
+    public DataRet<String> checkActivityGood(Long goodId) {
         return new DataRet<>("ERROR","商品已过期");
     }
 }

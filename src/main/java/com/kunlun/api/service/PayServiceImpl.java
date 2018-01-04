@@ -44,6 +44,9 @@ public class PayServiceImpl implements PayService {
     @Autowired
     private LogClient logClient;
 
+    @Autowired
+    private ActivityClient activityClient;
+
     /**
      * 统一下单
      *
@@ -164,6 +167,13 @@ public class PayServiceImpl implements PayService {
         //初始化订单实例
         Order order = orderDataRet.getBody();
 
+        if (CommonEnum.FREE_ORDER.getCode().equals(order.getOrderType())){
+            //校验活动商品是否还有库存
+            DataRet<String> activityGoodRet = activityClient.checkActivityGood(order.getGoodId());
+            if (!activityGoodRet.isSuccess()) {
+                return new DataRet("ERROR", activityGoodRet.getMessage());
+            }
+        }
         //校验商品信息
         DataRet<Good> goodDataRet = goodClient.checkGoodById(order.getGoodId(),0,0);
         if(!goodDataRet.isSuccess()){
