@@ -25,4 +25,17 @@ public class ActivityClientHystrix implements ActivityClient{
     public DataRet<String> checkActivity(Long goodId, Long activityId, String userId) {
         return new DataRet<>("ERROR","不可重复参加活动");
     }
+
+
+    /**
+     * 校验活动商品
+     *
+     * @param activityId
+     * @param goodId
+     * @return
+     */
+    @Override
+    public DataRet<String> checkActivityGood(Long activityId, Long goodId) {
+        return new DataRet<>("ERROR","商品已过期");
+    }
 }

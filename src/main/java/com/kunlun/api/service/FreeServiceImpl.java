@@ -1,8 +1,12 @@
 package com.kunlun.api.service;
 
+import com.kunlun.api.client.ActivityClient;
+import com.kunlun.api.client.GoodClient;
+import com.kunlun.entity.Good;
 import com.kunlun.result.DataRet;
 import com.kunlun.utils.WxUtil;
 import com.kunlun.wxentity.UnifiedRequestData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,6 +16,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class FreeServiceImpl implements FreeService{
+
+
+    @Autowired
+    private ActivityClient activityClient;
 
 
     /**
@@ -26,6 +34,12 @@ public class FreeServiceImpl implements FreeService{
         String userId= WxUtil.getOpenId(unifiedRequestData.getWxCode());
 
         //活动校验
+        DataRet<String> activityRet=activityClient.checkActivity(unifiedRequestData.getGoodId(),unifiedRequestData.getActivityId(),userId);
+        if (!activityRet.isSuccess()){
+            return new DataRet("ERROR",activityRet.getMessage());
+        }
+
+        //校验活动商品是否还有库存
 
         return null;
     }

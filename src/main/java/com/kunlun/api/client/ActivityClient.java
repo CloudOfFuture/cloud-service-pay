@@ -19,8 +19,20 @@ public interface ActivityClient {
      *
      * @return
      */
-    @GetMapping("/checkActivity")
+    @GetMapping("/activity/checkActivity")
      DataRet<String> checkActivity(@RequestParam(value = "goodId") Long goodId,
                                          @RequestParam(value = "activityId") Long activityId,
                                          @RequestParam(value = "userId") String userId);
+
+
+    /**
+     * 校验活动商品
+     *
+     * @param activityId
+     * @param goodId
+     * @return
+     */
+    @GetMapping("/activity/checkActivityGood")
+     DataRet<String>checkActivityGood(@RequestParam(value = "activityId") Long activityId,
+                                            @RequestParam(value = "goodId") Long goodId);
 }
