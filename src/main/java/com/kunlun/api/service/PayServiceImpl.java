@@ -164,11 +164,18 @@ public class PayServiceImpl implements PayService {
         //初始化订单实例
         Order order = orderDataRet.getBody();
 
+        //校验商品和积分信息
+        DataRet<String> checkGoodOrPointRet = checkPointAndGoodInfo(order.getOperatePoint(),order.getUserId(),
+                order.getGoodId(),order.getCount(),order.getOrderFee());
+        if(!checkGoodOrPointRet.isSuccess()){
+            return new DataRet<>("ERROR",checkGoodOrPointRet.getMessage());
+        }
+
         //校验商品信息
-        DataRet<Good> goodDataRet = goodClient.checkGoodById(order.getGoodId(),0,0);
+/*        DataRet<Good> goodDataRet = goodClient.checkGoodById(order.getGoodId(),0,0);
         if(!goodDataRet.isSuccess()){
             return new DataRet<>("ERROR",goodDataRet.getMessage());
-        }
+        }*/
 
         //生成签名
         Long timeStamp = System.currentTimeMillis()/1000;
@@ -237,6 +244,7 @@ public class PayServiceImpl implements PayService {
         return new DataRet<>("支付成功");
     }
 
+
     /**
      * 校验订单信息
      * @param orderId
@@ -266,5 +274,29 @@ public class PayServiceImpl implements PayService {
             return new DataRet<>("ERROR","订单支付超时，请重新下单");
         }
         return new DataRet<>(order);
+    }
+
+
+    /**
+     * 校验积分和商品信息
+     * @param point
+     * @param userId
+     * @param goodId
+     * @param count
+     * @param orderFee
+     * @return
+     */
+    private DataRet<String> checkPointAndGoodInfo(Integer point,String userId,Long goodId,Integer count,Integer orderFee){
+        //商品
+        DataRet<Good> checkGoodRet = goodClient.checkGoodById(goodId,count,orderFee);
+        if(!checkGoodRet.isSuccess()){
+            return new DataRet<>(checkGoodRet.getMessage());
+        }
+        //积分
+        DataRet<String> checkPointRet = pointClient.checkPoint(point,userId);
+        if(!checkPointRet.isSuccess()){
+            return new DataRet<>(checkPointRet.getMessage());
+        }
+        return new DataRet<>("校验成功");
     }
 }

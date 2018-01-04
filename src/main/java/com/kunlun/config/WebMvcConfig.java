@@ -3,6 +3,8 @@ package com.kunlun.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import feign.Request;
+import feign.Retryer;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
@@ -25,6 +27,17 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @LoadBalanced
     public RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+
+    @Bean
+    Request.Options feignOptions(){
+        return new Request.Options(/***connectTimeoutMills***/10 * 1000,/***readTimeoutMills***/10 * 1000);
+    }
+
+    @Bean
+    Retryer feignRetryer(){
+        return Retryer.NEVER_RETRY;
     }
 
     /**
