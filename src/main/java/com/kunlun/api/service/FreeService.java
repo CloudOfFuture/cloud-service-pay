@@ -1,6 +1,7 @@
 package com.kunlun.api.service;
 
 import com.kunlun.result.DataRet;
+import com.kunlun.wxentity.UnifiedOrderNotifyRequestData;
 import com.kunlun.wxentity.UnifiedRequestData; /**
  * @author by hmy
  * @version <0.1>
@@ -18,4 +19,12 @@ public interface FreeService {
      */
     DataRet apply(UnifiedRequestData unifiedRequestData, String ipAddress);
 
+
+    /**
+     *
+     *
+     * @param unifiedOrderNotifyRequestData
+     * @return
+     */
+    DataRet<String> callBack(UnifiedOrderNotifyRequestData unifiedOrderNotifyRequestData);
 }

@@ -7,6 +7,7 @@ import com.kunlun.enums.CommonEnum;
 import com.kunlun.exception.PayException;
 import com.kunlun.result.DataRet;
 import com.kunlun.utils.*;
+import com.kunlun.wxentity.UnifiedOrderNotifyRequestData;
 import com.kunlun.wxentity.UnifiedOrderResponseData;
 import com.kunlun.wxentity.UnifiedRequestData;
 import org.springframework.beans.BeanUtils;
@@ -130,6 +131,60 @@ public class FreeServiceImpl implements FreeService {
         return new DataRet<>(JSON.toJSON(map));
     }
 
+
+    /**
+     *成功回调
+     *
+     * @param unifiedOrderNotifyRequestData
+     * @return
+     */
+    @Override
+    public DataRet<String> callBack(UnifiedOrderNotifyRequestData unifiedOrderNotifyRequestData) {
+        //校验订单信息
+        DataRet<Order> orderRet = orderClient.findOrderByOrderNo(unifiedOrderNotifyRequestData.getOut_trade_no());
+        if(!orderRet.isSuccess()){
+            return new DataRet<>("ERROR",orderRet.getMessage());
+        }
+        Order order = orderRet.getBody();
+        if(order.getPayDate()==null&&CommonEnum.UN_PAY.getCode().equals(order.getOrderStatus())) {
+            //修改订单状态与微信支付订单号
+            DataRet<String> orderModifyRet = orderClient.modifyStatusAndPayOrderNo(order.getId(),
+                    CommonEnum.UN_DELIVERY.getCode(), unifiedOrderNotifyRequestData.getTransaction_id());
+            if (!orderModifyRet.isSuccess()) {
+                return new DataRet<>("ERROR", orderModifyRet.getMessage());
+            }
+            //修改订单日志
+            OrderLog orderLog = CommonUtil.constructOrderLog(order.getOrderNo(), "付款", "", order.getId());
+            DataRet<String> orderLogRet = logClient.addOrderLog(orderLog);
+            if (!orderLogRet.isSuccess()) {
+                return new DataRet<>("ERROR", orderLogRet.getMessage());
+            }
+            //获取活动商品
+           DataRet<ActivityGood> activityGoodDataRet=activityClient.findActivityGoodStock(order.getGoodId());
+            if (!activityGoodDataRet.isSuccess()){
+                return new DataRet<>("ERROR",activityGoodDataRet.getMessage());
+            }
+            ActivityGood activityGood=activityGoodDataRet.getBody();
+
+            //活动商品库存扣减
+            DataRet<String>updateStockDataRet=activityClient.updateStock(activityGood.getId(),order.getCount());
+            if (!updateStockDataRet.isSuccess()){
+                return new DataRet<>("ERROR",updateStockDataRet.getMessage());
+            }
+            //创建商品库存扣减日志
+            GoodLog goodLog = CommonUtil.constructGoodLog(order.getGoodId(),order.getGoodName(),"库存扣减"+order.getCount());
+            DataRet<String> goodLogRet = logClient.addGoodLog(goodLog);
+            if (!goodLogRet.isSuccess()){
+                return new DataRet<>("ERROR",goodLogRet.getMessage());
+            }
+            //销量
+            DataRet<String>saleVolumeDataRet=goodClient.updateSaleVolume(order.getCount(),order.getGoodId());
+            if (!saleVolumeDataRet.isSuccess()){
+                return new DataRet<>("ERROR",saleVolumeDataRet.getMessage());
+            }
+        }
+        return new DataRet<>("支付回调成功");
+    }
 
 
     /**

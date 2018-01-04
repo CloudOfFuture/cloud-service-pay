@@ -1,6 +1,7 @@
 package com.kunlun.api.hystrix;
 
 import com.kunlun.api.client.ActivityClient;
+import com.kunlun.entity.ActivityGood;
 import com.kunlun.result.DataRet;
 import org.springframework.stereotype.Component;
 
@@ -36,5 +37,30 @@ public class ActivityClientHystrix implements ActivityClient{
     @Override
     public DataRet<String> checkActivityGood(Long goodId) {
         return new DataRet<>("ERROR","商品已过期");
+    }
+
+
+    /**
+     * 获取活动商品库存库存
+     *
+     * @param goodId
+     * @return
+     */
+    @Override
+    public DataRet<ActivityGood> findActivityGoodStock(Long goodId) {
+        return new DataRet<>("ERROR","查无结果");
+    }
+
+
+    /**
+     * 活动商品库存扣减
+     *
+     * @param id
+     * @param count
+     * @return
+     */
+    @Override
+    public DataRet<String> updateStock(Long id, int count) {
+        return new DataRet<>("ERROR","库存扣减失败");
     }
 }

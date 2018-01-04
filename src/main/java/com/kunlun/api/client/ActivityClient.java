@@ -1,9 +1,11 @@
 package com.kunlun.api.client;
 
 import com.kunlun.api.hystrix.ActivityClientHystrix;
+import com.kunlun.entity.ActivityGood;
 import com.kunlun.result.DataRet;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -33,4 +35,25 @@ public interface ActivityClient {
     @GetMapping("/activity/checkActivityGood")
     DataRet<String>checkActivityGood(@RequestParam(value = "goodId") Long goodId);
 
+
+    /**
+     * 获取库存量
+     *
+     * @param goodId
+     * @return
+     */
+    @GetMapping("/activity/getStock")
+    DataRet<ActivityGood> findActivityGoodStock(@RequestParam(value = "goodId") Long goodId);
+
+
+    /**
+     * 库存扣减
+     *
+     * @param id
+     * @param count
+     * @return
+     */
+    @PostMapping("/activity/updateStock")
+    DataRet<String> updateStock(@RequestParam("id") Long id,
+                                @RequestParam("count") int count);
 }
