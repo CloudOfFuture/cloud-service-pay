@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author by hws
  * @created on 2017/12/26.
  */
-@FeignClient(value = "cloud-service-order",fallback = OrderClientHystrix.class)
+@FeignClient(value = "cloud-service-order", fallback = OrderClientHystrix.class)
 public interface OrderClient {
     /**
      * 新增订单
+     *
      * @param order
      * @return
      */
@@ -25,15 +26,17 @@ public interface OrderClient {
 
     /**
      * 修改预付款订单号
+     *
      * @param id
      * @param prepayId
      * @return
      */
     @PostMapping("/wx/order/updatePrepayId")
-    DataRet<String> updateOrderPrepayId(@RequestParam("id") Long id,@RequestParam("prepayId") String prepayId);
+    DataRet<String> updateOrderPrepayId(@RequestParam("id") Long id, @RequestParam("prepayId") String prepayId);
 
     /**
      * 根据id查找订单详情
+     *
      * @param orderId
      * @return
      */
@@ -42,6 +45,7 @@ public interface OrderClient {
 
     /**
      * 修改订单状态
+     *
      * @param id
      * @param status
      * @return
@@ -52,6 +56,7 @@ public interface OrderClient {
 
     /**
      * 根据订单号查找订单
+     *
      * @param orderNo
      * @return
      */
@@ -60,14 +65,15 @@ public interface OrderClient {
 
     /**
      * 修改订单状态和支付订单号
+     *
      * @param id
      * @param status
      * @param wxOrderNo
      * @return
      */
     @PostMapping("/backend/order/modifyStatusAndPayOrderNo")
-    DataRet<String>modifyStatusAndPayOrderNo(@RequestParam(value = "id") Long id,
-                                             @RequestParam(value = "status") String status,
-                                             @RequestParam(value = "wxOrderNo") String wxOrderNo);
+    DataRet<String> modifyStatusAndPayOrderNo(@RequestParam(value = "id") Long id,
+                                              @RequestParam(value = "status") String status,
+                                              @RequestParam(value = "wxOrderNo") String wxOrderNo);
 }
 

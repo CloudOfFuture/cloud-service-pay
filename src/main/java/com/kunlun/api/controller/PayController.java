@@ -47,46 +47,48 @@ public class PayController {
         return payService.unifiedOrder(unifiedRequestData, ipAddress);
     }
 
-    /**重新支付
+    /**
+     * 重新支付
      *
      * @param orderId
      * @return
      */
     @PostMapping("/order/repay")
-    public DataRet<Object> repay(@RequestParam(value = "orderId") Long orderId){
+    public DataRet<Object> repay(@RequestParam(value = "orderId") Long orderId) {
         return payService.repay(orderId);
     }
 
 
     /**
      * 支付成功回调
+     *
      * @param request
      */
     @PostMapping("/order/payCallback")
-    public void payCallBack(HttpServletRequest request){
+    public void payCallBack(HttpServletRequest request) {
         String inputLine;
         StringBuffer notifyXml = new StringBuffer();
         //读取流中的信息
-        try{
-            while((inputLine = request.getReader().readLine())!=null){
+        try {
+            while ((inputLine = request.getReader().readLine()) != null) {
                 notifyXml.append(inputLine);//添加内容
             }
             request.getReader().close();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         //将xml字符串转换成统一下单请求对象
         UnifiedOrderNotifyRequestData unifiedOrderNotifyRequestData = XmlUtil.castXMLStringToUnifiedOrderNotifyRequestData(
                 notifyXml.toString());
-        if("FAIL".equalsIgnoreCase(unifiedOrderNotifyRequestData.getReturn_code())){
-            LOGGER.error("@微信错误-----"+unifiedOrderNotifyRequestData.getReturn_msg());
+        if ("FAIL".equalsIgnoreCase(unifiedOrderNotifyRequestData.getReturn_code())) {
+            LOGGER.error("@微信错误-----" + unifiedOrderNotifyRequestData.getReturn_msg());
             return;
         }
 
         //支付成功回调函数
         DataRet<String> callbackRet = payService.payCallBack(unifiedOrderNotifyRequestData);
-        if(!callbackRet.isSuccess()){
+        if (!callbackRet.isSuccess()) {
             return;
         }
 
@@ -96,7 +98,7 @@ public class PayController {
         unifiedOrderNotifyResponseData.setReturn_msg("OK");
         String responseXML = XmlUtil.castDataToXMLString(unifiedOrderNotifyResponseData);
         //通知微信回调成功
-        WxUtil.httpsRequest(WxPayConstant.WECHAT_UNIFIED_ORDER_URL,"POST",responseXML);
+        WxUtil.httpsRequest(WxPayConstant.WECHAT_UNIFIED_ORDER_URL, "POST", responseXML);
     }
 
 

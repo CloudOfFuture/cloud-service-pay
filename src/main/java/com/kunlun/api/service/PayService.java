@@ -22,6 +22,7 @@ public interface PayService {
 
     /**
      * 重新支付
+     *
      * @param id
      * @return
      */
@@ -29,6 +30,7 @@ public interface PayService {
 
     /**
      * 支付成功回调
+     *
      * @param unifiedOrderNotifyRequestData
      * @return
      */
