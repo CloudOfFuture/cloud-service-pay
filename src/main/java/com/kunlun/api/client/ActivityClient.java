@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @version <0.1>
  * @created on 2018-01-04.
  */
-@FeignClient(value = "cloud-service-common",fallback = ActivityClientHystrix.class)
+@FeignClient(value = "cloud-service-common", fallback = ActivityClientHystrix.class)
 public interface ActivityClient {
 
     /**
@@ -22,9 +22,9 @@ public interface ActivityClient {
      * @return
      */
     @GetMapping("/activity/checkActivity")
-     DataRet<String> checkActivity(@RequestParam(value = "goodId") Long goodId,
-                                         @RequestParam(value = "activityId") Long activityId,
-                                         @RequestParam(value = "userId") String userId);
+    DataRet<String> checkActivity(@RequestParam(value = "goodId") Long goodId,
+                                  @RequestParam(value = "activityId") Long activityId,
+                                  @RequestParam(value = "userId") String userId);
 
     /**
      * 校验活动商品
@@ -33,7 +33,7 @@ public interface ActivityClient {
      * @return
      */
     @GetMapping("/activity/checkActivityGood")
-    DataRet<String>checkActivityGood(@RequestParam(value = "goodId") Long goodId);
+    DataRet<String> checkActivityGood(@RequestParam(value = "goodId") Long goodId);
 
 
     /**

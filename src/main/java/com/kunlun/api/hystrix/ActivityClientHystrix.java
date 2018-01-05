@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @created on 2018-01-04.
  */
 @Component
-public class ActivityClientHystrix implements ActivityClient{
+public class ActivityClientHystrix implements ActivityClient {
 
 
     /**
@@ -24,7 +24,7 @@ public class ActivityClientHystrix implements ActivityClient{
      */
     @Override
     public DataRet<String> checkActivity(Long goodId, Long activityId, String userId) {
-        return new DataRet<>("ERROR","不可重复参加活动");
+        return new DataRet<>("ERROR", "不可重复参加活动");
     }
 
 
@@ -36,7 +36,7 @@ public class ActivityClientHystrix implements ActivityClient{
      */
     @Override
     public DataRet<String> checkActivityGood(Long goodId) {
-        return new DataRet<>("ERROR","商品已过期");
+        return new DataRet<>("ERROR", "商品已过期");
     }
 
 
@@ -48,7 +48,7 @@ public class ActivityClientHystrix implements ActivityClient{
      */
     @Override
     public DataRet<ActivityGood> findActivityGoodStock(Long goodId) {
-        return new DataRet<>("ERROR","查无结果");
+        return new DataRet<>("ERROR", "查无结果");
     }
 
 
@@ -61,6 +61,6 @@ public class ActivityClientHystrix implements ActivityClient{
      */
     @Override
     public DataRet<String> updateStock(Long id, int count) {
-        return new DataRet<>("ERROR","库存扣减失败");
+        return new DataRet<>("ERROR", "库存扣减失败");
     }
 }
