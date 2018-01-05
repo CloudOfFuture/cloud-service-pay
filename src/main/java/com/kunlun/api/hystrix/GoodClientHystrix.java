@@ -60,4 +60,17 @@ public class GoodClientHystrix implements GoodClient {
     public DataRet<String> updateGoodStock(Long id, Integer count) {
         return new DataRet<>("ERROR","修改商品库存发生异常");
     }
+
+
+    /**
+     * 修改销量
+     *
+     * @param count
+     * @param goodId
+     * @return
+     */
+    @Override
+    public DataRet<String> updateSaleVolume(Integer count, Long goodId) {
+        return new DataRet<>("ERROR","修改销量失败");
+    }
 }
