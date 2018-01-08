@@ -1,6 +1,7 @@
 package com.kunlun.api.client;
 
 import com.kunlun.api.hystrix.ActivityClientHystrix;
+import com.kunlun.config.FeignConfig;
 import com.kunlun.entity.ActivityGood;
 import com.kunlun.result.DataRet;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @version <0.1>
  * @created on 2018-01-04.
  */
-@FeignClient(value = "cloud-service-common", fallback = ActivityClientHystrix.class)
+@FeignClient(value = "cloud-service-common",configuration = FeignConfig.class,fallback = ActivityClientHystrix.class)
 public interface ActivityClient {
 
     /**
