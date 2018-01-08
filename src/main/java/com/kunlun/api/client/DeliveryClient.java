@@ -20,7 +20,7 @@ public interface DeliveryClient {
      * @return
      */
     @GetMapping("/delivery/checkDelivery")
-    DataRet<Delivery> checkDelivery(@RequestParam(value = "id") Long id);
+    DataRet<Delivery> checkDelivery(@RequestParam(value = "deliveryId") Long deliveryId);
 
     /**
      * 根据id查找收货详情
