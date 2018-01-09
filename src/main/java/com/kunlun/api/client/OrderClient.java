@@ -50,7 +50,7 @@ public interface OrderClient {
      * @param status
      * @return
      */
-    @PostMapping("/backend/order/modifyStatus")
+    @PostMapping("/backend/order/updateStatusById")
     DataRet<String> modifyOrderStatus(@RequestParam(value = "id") Long id,
                                       @RequestParam(value = "status") String status);
 

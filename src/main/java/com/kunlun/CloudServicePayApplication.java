@@ -12,7 +12,6 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 @EnableDiscoveryClient
 @EnableAutoConfiguration(exclude = DataSourceAutoConfiguration.class)
 @SpringBootApplication
-@EnableHystrix
 @EnableFeignClients
 public class CloudServicePayApplication {
 
