@@ -30,11 +30,11 @@ public class GoodClientHystrix implements GoodClient {
     /**
      * 根据id查找详情
      *
-     * @param id
+     * @param goodId
      * @return
      */
     @Override
-    public DataRet findById(Long id) {
+    public DataRet findById(Long goodId) {
         return new DataRet("ERROR","查询商品详情失败");
     }
 
