@@ -18,7 +18,7 @@ public class DeliveryClientHystrix implements DeliveryClient {
      * @return
      */
     @Override
-    public DataRet<Delivery> checkDelivery(Long id) {
+    public DataRet<Delivery> checkDelivery(Long deliveryId) {
         return new DataRet("Error","收获地址校验异常");
     }
 

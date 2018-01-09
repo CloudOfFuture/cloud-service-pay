@@ -50,10 +50,10 @@ public class FreeServiceImpl implements FreeService {
      */
     @Override
     public DataRet apply(UnifiedRequestData unifiedRequestData, String ipAddress) {
-        String userId = WxUtil.getOpenId(unifiedRequestData.getWxCode());
+//        String userId = WxUtil.getOpenId(unifiedRequestData.getWxCode());
 
         //活动校验
-        DataRet<String> activityRet = activityClient.checkActivity(unifiedRequestData.getGoodId(), unifiedRequestData.getActivityId(), userId);
+        DataRet<String> activityRet = activityClient.checkActivity(unifiedRequestData.getGoodId(), unifiedRequestData.getActivityId(), unifiedRequestData.getWxCode());
         if (!activityRet.isSuccess()) {
             return new DataRet("ERROR", activityRet.getMessage());
         }
@@ -65,7 +65,7 @@ public class FreeServiceImpl implements FreeService {
         }
 
         //获取收货地址
-        DataRet<Delivery> deliveryRet = deliveryClient.findById(unifiedRequestData.getDeliveryId());
+        DataRet<Delivery> deliveryRet = deliveryClient.checkDelivery(unifiedRequestData.getDeliveryId());
         if (!deliveryRet.isSuccess()) {
             return new DataRet<>("ERROR", deliveryRet.getMessage());
         }
@@ -84,7 +84,7 @@ public class FreeServiceImpl implements FreeService {
         }
 
         //构建订单
-        Order order = orderConstructor(deliveryRet.getBody(),goodSnapshot.getId(),userId,goodDataRet.getBody(),unifiedRequestData);
+        Order order = orderConstructor(deliveryRet.getBody(),goodSnapshot.getId(),unifiedRequestData.getWxCode(),goodDataRet.getBody(),unifiedRequestData);
         DataRet<String> orderDataRet = orderClient.addOrder(order);
         if (!orderDataRet.isSuccess()){
             return new DataRet("ERROR",orderDataRet.getMessage());
@@ -100,7 +100,7 @@ public class FreeServiceImpl implements FreeService {
         //微信统一下单
         String nonce_str = WxUtil.createRandom(false, 10);
         String unifiedOrderXML= WxSignUtil.unifiedOrder(goodDataRet.getBody().getGoodName(),
-                                                        userId,order.getOrderNo(),order.getPaymentFee(),
+                                                        unifiedRequestData.getWxCode(),order.getOrderNo(),order.getPaymentFee(),
                                                         nonce_str,"FREE");
         //调用微信统一下单接口,生成预付款订单
         String wxOrderResponse = WxUtil.httpsRequest(WxPayConstant.WECHAT_UNIFIED_ORDER_URL,"POST",unifiedOrderXML);
