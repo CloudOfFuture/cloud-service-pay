@@ -11,22 +11,15 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author by hws
  * @created on 2017/12/26.
  */
-@FeignClient(value = "cloud-service-user-center",fallback = DeliveryClientHystrix.class)
+@FeignClient(value = "cloud-service-user-center")
 public interface DeliveryClient {
 
-    /**
-     * 校验收获地址
-     * @param id
-     * @return
-     */
-    @GetMapping("/delivery/checkDelivery")
-    DataRet<Delivery> checkDelivery(@RequestParam(value = "deliveryId") Long deliveryId);
 
     /**
      * 根据id查找收货详情
-     * @param id
+     * @param deliveryId
      * @return
      */
-    @GetMapping("/delivery/findDetailById")
-    DataRet<Delivery> findById(@RequestParam(value = "id") Long id);
+    @GetMapping("/delivery/findById")
+    DataRet<Delivery> findById(@RequestParam(value = "deliveryId") Long deliveryId);
 }

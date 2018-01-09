@@ -87,7 +87,7 @@ public class PayServiceImpl implements PayService {
         }
 
         //查询收货地址
-        DataRet<Delivery> deliveryRet = deliveryClient.checkDelivery(unifiedRequestData.getDeliveryId());
+        DataRet<Delivery> deliveryRet = deliveryClient.findById(unifiedRequestData.getDeliveryId());
         if (!deliveryRet.isSuccess()) {
             return new DataRet<>("ERROR", deliveryRet.getMessage());
         }

@@ -64,7 +64,7 @@ public class FreeServiceImpl implements FreeService {
         }
 
         //获取收货地址
-        DataRet<Delivery> deliveryRet = deliveryClient.checkDelivery(unifiedRequestData.getDeliveryId());
+        DataRet<Delivery> deliveryRet = deliveryClient.findById(unifiedRequestData.getDeliveryId());
         if (!deliveryRet.isSuccess()) {
             return new DataRet<>("ERROR", deliveryRet.getMessage());
         }
