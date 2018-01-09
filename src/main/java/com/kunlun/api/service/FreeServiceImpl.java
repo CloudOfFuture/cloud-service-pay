@@ -45,11 +45,10 @@ public class FreeServiceImpl implements FreeService {
      * 免费试用预付款订单
      *
      * @param unifiedRequestData
-     * @param ipAddress
      * @return
      */
     @Override
-    public DataRet apply(UnifiedRequestData unifiedRequestData, String ipAddress) {
+    public DataRet apply(UnifiedRequestData unifiedRequestData) {
 //        String userId = WxUtil.getOpenId(unifiedRequestData.getWxCode());
 
         //活动校验
@@ -91,7 +90,7 @@ public class FreeServiceImpl implements FreeService {
         }
 
         //创建订单日志
-        OrderLog orderLog=CommonUtil.constructOrderLog(order.getOrderNo(),"生成预付款订单",ipAddress,order.getId());
+        OrderLog orderLog=CommonUtil.constructOrderLog(order.getOrderNo(),"生成预付款订单",unifiedRequestData.getIpAddress(),order.getId());
         DataRet<String>orderLogRet=logClient.addOrderLog(orderLog);
         if (!orderLogRet.isSuccess()){
             return new DataRet("ERROR",orderLogRet.getMessage());

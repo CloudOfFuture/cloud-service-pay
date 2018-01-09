@@ -37,13 +37,11 @@ public class FreeController {
      * 试用预付款订单
      *
      * @param unifiedRequestData
-     * @param request
      * @return
      */
     @PostMapping("/apply")
-    public DataRet apply(@RequestBody UnifiedRequestData unifiedRequestData,
-                         String  ipAddress){
-        return freeService.apply(unifiedRequestData,ipAddress);
+    public DataRet apply(@RequestBody UnifiedRequestData unifiedRequestData){
+        return freeService.apply(unifiedRequestData);
     }
 
 
