@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @version <0.1>
  * @created on 2017/12/26.
  */
-@FeignClient(value = "cloud-service-good",fallback = GoodClientHystrix.class)
+@FeignClient(value = "cloud-service-good")
 public interface GoodClient {
 
     /**
@@ -26,16 +26,16 @@ public interface GoodClient {
     @GetMapping("/backstage/good/checkGood")
     DataRet<Good> checkGoodById(@RequestParam("goodId")Long goodId,
                                   @RequestParam("count") Integer count,
-                                  @RequestParam("orederFee") Integer orderFee);
+                                  @RequestParam("orderFee") Integer orderFee);
 
 
     /**
      * 根据id查找详情
-     * @param id
+     * @param goodId
      * @return
      */
     @GetMapping("/backstage/good/findById")
-    DataRet<Good> findById(@RequestParam(value = "id") Long id);
+    DataRet<Good> findById(@RequestParam(value = "goodId") Long goodId);
 
     /**
      * 新增商品快照
