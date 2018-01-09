@@ -7,8 +7,10 @@ import feign.Request;
 import feign.Retryer;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -21,6 +23,7 @@ import java.util.List;
  * @version <0.1>
  * @created on 2017/12/21.
  */
+@Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Bean
@@ -47,16 +50,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
-        FastJsonConfig fastJsonConfig = new FastJsonConfig();
-        fastJsonConfig.setSerializerFeatures(SerializerFeature.MapSortField);
-        //解决浏览器返回 content-type格式错误
-        List<MediaType> mediaTypes = new ArrayList<>();
-        mediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
-        fastJsonHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
-        fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
-        converters.add(fastJsonHttpMessageConverter);
-        super.configureMessageConverters(converters);
+        MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+        converters.add(mappingJackson2HttpMessageConverter);
     }
 
     /**
