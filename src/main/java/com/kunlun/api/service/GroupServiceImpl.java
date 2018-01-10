@@ -48,10 +48,10 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public DataRet joinGroup(UnifiedRequestData unifiedRequestData, String ipAddress) {
-        String userId = WxUtil.getOpenId(unifiedRequestData.getWxCode());
+//        String userId = WxUtil.getOpenId(unifiedRequestData.getWxCode());
 
         //查询是否参见过活动
-        DataRet activityRet = activityClient.checkActivity(unifiedRequestData.getGoodId(), unifiedRequestData.getActivityId(), userId);
+        DataRet activityRet = activityClient.checkActivity(unifiedRequestData.getGoodId(), unifiedRequestData.getActivityId(), unifiedRequestData.getWxCode());
         if (!activityRet.isSuccess()) {
             return new DataRet("ERROR", activityRet.getMessage());
         }
@@ -77,7 +77,7 @@ public class GroupServiceImpl implements GroupService {
             return new DataRet("ERROR", goodSnapshotDataRet.getMessage());
         }
         //构建订单
-        Order order = orderConstructor(goodDataRet.getBody(), goodSnapshot.getId(), deliveryRet.getBody(), unifiedRequestData, userId);
+        Order order = orderConstructor(goodDataRet.getBody(), goodSnapshot.getId(), deliveryRet.getBody(), unifiedRequestData, unifiedRequestData.getWxCode());
         DataRet<String> orderDataRet = orderClient.addOrder(order);
         if (!orderDataRet.isSuccess()) {
             return new DataRet("ERROR", orderDataRet.getMessage());
@@ -93,7 +93,7 @@ public class GroupServiceImpl implements GroupService {
         //微信统一下单
         String nonce_str = WxUtil.createRandom(false, 10);
         String unifiedOrderXML = WxSignUtil.unifiedOrder(goodDataRet.getBody().getGoodName(),
-                userId, order.getOrderNo(), order.getPaymentFee(),
+                unifiedRequestData.getWxCode(), order.getOrderNo(), order.getPaymentFee(),
                 nonce_str, "GROUP");
         //调用微信统一下单接口,生成预付款订单
         String wxOrderResponse = WxUtil.httpsRequest(WxPayConstant.WECHAT_UNIFIED_ORDER_URL, "POST", unifiedOrderXML);
