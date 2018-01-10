@@ -1,6 +1,5 @@
 package com.kunlun.api.service;
 
-import com.alibaba.fastjson.JSON;
 import com.kunlun.api.client.*;
 import com.kunlun.constant.Constant;
 import com.kunlun.entity.*;
@@ -11,12 +10,10 @@ import com.kunlun.utils.*;
 import com.kunlun.wxentity.UnifiedOrderNotifyRequestData;
 import com.kunlun.wxentity.UnifiedOrderResponseData;
 import com.kunlun.wxentity.UnifiedRequestData;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * @author by kunlun
@@ -149,7 +146,8 @@ public class PayServiceImpl implements PayService {
         Map<String, Object> map = WxSignUtil.payParam(timeStamp, nonceStr, unifiedOrderResponseData.getPrepay_id());
         String paySign = WxSignUtil.paySign(map);
         map.put("paySign", paySign);
-        return new DataRet<>(JSON.toJSON(map));
+//        return new DataRet<>(JSON.toJSON(map));
+        return new DataRet<>();
     }
 
     /**
@@ -195,7 +193,8 @@ public class PayServiceImpl implements PayService {
         String paySign = WxSignUtil.paySign(map);
         map.put("paySign", paySign);
 
-        return new DataRet<>(JSON.toJSON(map));
+//        return new DataRet<>(JSON.toJSON(map));
+        return new DataRet<>(JacksonUtil.toJSON(map));
     }
 
     /**
