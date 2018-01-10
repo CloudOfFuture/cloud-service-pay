@@ -1,5 +1,6 @@
 package com.kunlun.api.service;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kunlun.api.client.*;
 import com.kunlun.entity.*;
@@ -14,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -128,9 +130,8 @@ public class FreeServiceImpl implements FreeService {
         //生成支付签名
         Map<String,Object> map = WxSignUtil.payParam(timeStamp,nonceStr,unifiedOrderResponseData.getPrepay_id());
         String paySign = WxSignUtil.paySign(map);
-//        mareturn new DataRet(JSON.toJSON(map));p.put("paySign",paySign);
-//        return new DataRet(mapper.writeValueAsString(map));
-        return null;
+        map.put("paySign",paySign);
+        return new DataRet(JSON.toJSON(map));
 
     }
 

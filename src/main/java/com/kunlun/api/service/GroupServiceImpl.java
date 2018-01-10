@@ -1,5 +1,6 @@
 package com.kunlun.api.service;
 
+import com.alibaba.fastjson.JSON;
 import com.kunlun.api.client.*;
 import com.kunlun.entity.*;
 import com.kunlun.enums.CommonEnum;
@@ -120,8 +121,8 @@ public class GroupServiceImpl implements GroupService {
         Map<String, Object> map = WxSignUtil.payParam(timeStamp, nonceStr, unifiedOrderResponseData.getPrepay_id());
         String paySign = WxSignUtil.paySign(map);
         map.put("paySign", paySign);
-//        return new DataRet<>(JSON.toJSON(map));
-        return new DataRet<>(JacksonUtil.toJSON(map));
+        return new DataRet<>(JSON.toJSON(map));
+//        return new DataRet<>(JacksonUtil.toJSON(map));
     }
 
     @Override
