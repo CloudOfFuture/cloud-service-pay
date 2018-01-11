@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @version <0.1>
  * @created on 2017/12/26.
  */
-@FeignClient(value = "cloud-service-good")
+@FeignClient(value = "cloud-service-good",fallback = GoodClientHystrix.class)
 public interface GoodClient {
 
     /**
