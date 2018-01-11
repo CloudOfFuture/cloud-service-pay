@@ -11,24 +11,26 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @version <0.1>
  * @created on 2017/12/26.
  */
-@FeignClient(value = "cloud-service-common",fallback = TicketClientHystrix.class)
+@FeignClient(value = "cloud-service-common", fallback = TicketClientHystrix.class)
 public interface TicketClient {
 
     /**
      * 检查优惠券
+     *
      * @param userTicket
      * @param ticketId
      * @return
      */
     @GetMapping("/ticket/checkTicket")
-    DataRet<String> checkTicket(@RequestParam("useTicket") String userTicket, @RequestParam("ticketId") Long ticketId);
+    DataRet<String> checkTicket(@RequestParam(value = "useTicket") String userTicket, @RequestParam(value = "ticketId") Long ticketId);
 
     /**
      * 修改用户优惠券状态
+     *
      * @param status
-     * @param id
+     * @param ticketId
      * @return
      */
     @GetMapping("/ticket/modifyStatus")
-    DataRet<String> modifyStatus(@RequestParam(value = "id") Long id,@RequestParam(value = "status") String status);
+    DataRet<String> modifyStatus(@RequestParam(value = "ticketId") Long ticketId, @RequestParam(value = "status") String status);
 }

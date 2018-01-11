@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author by hws
  * @created on 2017/12/26.
  */
-@FeignClient(value = "cloud-service-user-center")
+@FeignClient(value = "cloud-service-user-center",fallback = DeliveryClientHystrix.class)
 public interface DeliveryClient {
 
 
