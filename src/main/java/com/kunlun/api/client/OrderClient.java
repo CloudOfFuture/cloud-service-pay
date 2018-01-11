@@ -41,7 +41,7 @@ public interface OrderClient {
      * @return
      */
     @GetMapping("/wx/order/findById")
-    DataRet<Order> findOrderById(@RequestParam(value = "orderId") Long orderId);
+    DataRet<Order> findById(@RequestParam(value = "orderId") Long orderId);
 
     /**
      * 修改订单状态

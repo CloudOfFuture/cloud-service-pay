@@ -76,7 +76,7 @@ public class PayServiceImpl implements PayService {
 
 
         //商品信息校验
-        DataRet<Good> goodRet = goodClient.checkGoodById(unifiedRequestData.getGoodId(),
+        DataRet<Good> goodRet = goodClient.checkGood(unifiedRequestData.getGoodId(),
                 unifiedRequestData.getCount(),
                 unifiedRequestData.getOrderFee());
         if (!goodRet.isSuccess()) {
@@ -181,7 +181,7 @@ public class PayServiceImpl implements PayService {
             }
         }
         //校验商品信息
-        DataRet<Good> goodDataRet = goodClient.checkGoodById(order.getGoodId(), 0, 0);
+        DataRet<Good> goodDataRet = goodClient.checkGood(order.getGoodId(), 0, 0);
         if (!goodDataRet.isSuccess()) {
             return new DataRet<>("ERROR", goodDataRet.getMessage());
         }
@@ -261,14 +261,14 @@ public class PayServiceImpl implements PayService {
      * @return
      */
     private DataRet<Order> checkOrder(Long orderId) {
-        DataRet<Order> orderDataRet = orderClient.findOrderById(orderId);
+        DataRet<Order> orderDataRet = orderClient.findById(orderId);
         if (!orderDataRet.isSuccess()) {
             return new DataRet<>("ERROR", orderDataRet.getMessage());
         }
 
         Order order = orderDataRet.getBody();
 
-        if (CommonEnum.UN_PAY.getCode().equalsIgnoreCase(order.getOrderStatus())) {
+        if (!CommonEnum.UN_PAY.getCode().equalsIgnoreCase(order.getOrderStatus())) {
             return new DataRet<>("ERROR", "订单状态异常");
         }
 

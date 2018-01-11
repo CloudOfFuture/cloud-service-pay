@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @version <0.1>
  * @created on 2017/12/26.
  */
-@FeignClient(value = "cloud-service-good",fallback = GoodClientHystrix.class)
+@FeignClient(value = "cloud-service-good", fallback = GoodClientHystrix.class)
 public interface GoodClient {
 
     /**
@@ -25,9 +25,9 @@ public interface GoodClient {
      * @return
      */
     @GetMapping("/backstage/good/checkGood")
-    DataRet<Good> checkGoodById(@RequestParam("goodId") Long goodId,
-                                @RequestParam("count") Integer count,
-                                @RequestParam("orderFee") Integer orderFee);
+    DataRet<Good> checkGood(@RequestParam("goodId") Long goodId,
+                            @RequestParam("count") Integer count,
+                            @RequestParam("orderFee") Integer orderFee);
 
 
     /**
