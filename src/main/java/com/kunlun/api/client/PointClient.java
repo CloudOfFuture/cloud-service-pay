@@ -23,7 +23,7 @@ public interface PointClient {
      * @param openid
      * @return
      */
-    @GetMapping("/point/checkPoint")
+    @PostMapping("/point/checkPoint")
     DataRet<String> checkPoint(@RequestParam("pointValue") Integer pointValue,
                                @RequestParam("openid") String openid);
 
