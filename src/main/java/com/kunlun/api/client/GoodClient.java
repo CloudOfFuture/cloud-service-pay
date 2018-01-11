@@ -20,17 +20,19 @@ public interface GoodClient {
 
     /**
      * 商品信息检查
+     *
      * @param goodId
      * @return
      */
     @GetMapping("/backstage/good/checkGood")
-    DataRet<Good> checkGoodById(@RequestParam("goodId")Long goodId,
-                                  @RequestParam("count") Integer count,
-                                  @RequestParam("orderFee") Integer orderFee);
+    DataRet<Good> checkGoodById(@RequestParam("goodId") Long goodId,
+                                @RequestParam("count") Integer count,
+                                @RequestParam("orderFee") Integer orderFee);
 
 
     /**
      * 根据id查找详情
+     *
      * @param goodId
      * @return
      */
@@ -39,6 +41,7 @@ public interface GoodClient {
 
     /**
      * 新增商品快照
+     *
      * @param goodSnapshot
      * @return
      */
@@ -48,6 +51,7 @@ public interface GoodClient {
 
     /**
      * 修改商品库存
+     *
      * @param id
      * @param count
      * @return

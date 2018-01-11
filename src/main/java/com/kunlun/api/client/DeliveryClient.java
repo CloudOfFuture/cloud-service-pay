@@ -17,9 +17,9 @@ public interface DeliveryClient {
 
     /**
      * 根据id查找收货详情
-     * @param deliveryId
+     * @param id
      * @return
      */
     @GetMapping("/delivery/findById")
-    DataRet<Delivery> findById(@RequestParam(value = "deliveryId") Long deliveryId);
+    DataRet<Delivery> findById(@RequestParam(value = "id") Long id);
 }
