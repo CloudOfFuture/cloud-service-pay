@@ -20,12 +20,12 @@ public interface PointClient {
     /**
      * 校验积分
      * @param pointValue
-     * @param openid
+     * @param openId
      * @return
      */
     @GetMapping("/point/checkPoint")
     DataRet<String> checkPoint(@RequestParam("pointValue") Integer pointValue,
-                               @RequestParam("openid") String openid);
+                               @RequestParam("openId") String openId);
 
     /**
      * 积分操作

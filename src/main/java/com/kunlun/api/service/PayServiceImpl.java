@@ -53,10 +53,10 @@ public class PayServiceImpl implements PayService {
      */
     @Override
     public DataRet<Object> unifiedOrder(UnifiedRequestData unifiedRequestData, String ipAddress) {
-        String openid = WxUtil.getOpenId(unifiedRequestData.getWxCode());
+//        String openId = WxUtil.getOpenId(unifiedRequestData.getWxCode());
         //积分校验
         Integer pointValue = unifiedRequestData.getPoint();
-        DataRet<String> pointRet = pointClient.checkPoint(pointValue, openid);
+        DataRet<String> pointRet = pointClient.checkPoint(pointValue, unifiedRequestData.getWxCode());
         if (!pointRet.isSuccess()) {
             return new DataRet<>("ERROR", pointRet.getMessage());
         }
@@ -101,7 +101,7 @@ public class PayServiceImpl implements PayService {
                 goodSnapshot.getId(),
                 unifiedRequestData,
                 deliveryRet.getBody(),
-                openid);
+                unifiedRequestData.getWxCode());
         DataRet<String> orderRet = orderClient.addOrder(postOreder);
         if (!orderRet.isSuccess()) {
             return new DataRet<>("ERROR", orderRet.getMessage());
@@ -116,7 +116,7 @@ public class PayServiceImpl implements PayService {
 
         //调用微信下单接口
         String nonce_str = WxUtil.createRandom(false, 10);
-        String unifiedOrderXML = WxSignUtil.unifiedOrder(goodRet.getBody().getGoodName(), openid,
+        String unifiedOrderXML = WxSignUtil.unifiedOrder(goodRet.getBody().getGoodName(), unifiedRequestData.getWxCode(),
                 postOreder.getOrderNo(),
                 postOreder.getPaymentFee(),
                 nonce_str, "UNIFIED");
