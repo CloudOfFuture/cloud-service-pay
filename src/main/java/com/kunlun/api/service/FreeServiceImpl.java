@@ -52,9 +52,10 @@ public class FreeServiceImpl implements FreeService {
     @Override
     public DataRet apply(UnifiedRequestData unifiedRequestData) {
 //        String userId = WxUtil.getOpenId(unifiedRequestData.getWxCode());
+        String userId=unifiedRequestData.getWxCode();
 
         //活动校验
-        DataRet<String> activityRet = activityClient.checkActivity(unifiedRequestData.getGoodId(), unifiedRequestData.getActivityId(), unifiedRequestData.getWxCode());
+        DataRet<String> activityRet = activityClient.checkActivity(unifiedRequestData.getGoodId(), unifiedRequestData.getActivityId(), userId);
         if (!activityRet.isSuccess()) {
             return new DataRet("ERROR", activityRet.getMessage());
         }
