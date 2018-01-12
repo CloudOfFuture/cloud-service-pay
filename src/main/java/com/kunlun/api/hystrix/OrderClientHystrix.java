@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @created on 2017/12/26.
  */
 @Component
-public class OrderClientHystrix implements OrderClient{
+public class OrderClientHystrix implements OrderClient {
     /**
      * 新增订单
      *
@@ -19,7 +19,7 @@ public class OrderClientHystrix implements OrderClient{
      */
     @Override
     public DataRet<String> addOrder(Order order) {
-        return new DataRet<>("ERROR","新增订单发生异常");
+        return new DataRet<>("ERROR", "新增订单发生异常");
     }
 
     /**
@@ -31,19 +31,20 @@ public class OrderClientHystrix implements OrderClient{
      */
     @Override
     public DataRet<String> updateOrderPrepayId(Long id, String prepayId) {
-        return new DataRet<>("ERROR","修改预付款订单号发生异常");
+        return new DataRet<>("ERROR", "修改预付款订单号发生异常");
     }
 
     /**
      * 根据id查找订单详情
      *
-     * @param id
+     * @param orderId
      * @return
      */
     @Override
-    public DataRet<Order> findOrderById(Long id) {
-        return new DataRet<>("ERROR","查找订单详情异常");
+    public DataRet<Order> findById(Long orderId) {
+        return new DataRet<>("ERROR", "查找订单详情异常");
     }
+
 
     /**
      * 修改订单状态
@@ -54,7 +55,7 @@ public class OrderClientHystrix implements OrderClient{
      */
     @Override
     public DataRet<String> modifyOrderStatus(Long id, String status) {
-        return new DataRet<>("ERROR","修改订单状态发生异常");
+        return new DataRet<>("ERROR", "修改订单状态发生异常");
     }
 
     /**
@@ -65,7 +66,7 @@ public class OrderClientHystrix implements OrderClient{
      */
     @Override
     public DataRet<Order> findOrderByOrderNo(String orderNo) {
-        return new DataRet<>("ERROR","查找订单发生异常");
+        return new DataRet<>("ERROR", "查找订单发生异常");
     }
 
     /**
@@ -78,6 +79,6 @@ public class OrderClientHystrix implements OrderClient{
      */
     @Override
     public DataRet<String> modifyStatusAndPayOrderNo(Long id, String status, String wxOrderNo) {
-        return new DataRet<>("ERROR","修改订单状态失败");
+        return new DataRet<>("ERROR", "修改订单状态失败");
     }
 }
