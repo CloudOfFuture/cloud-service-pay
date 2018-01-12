@@ -125,6 +125,12 @@ public class GroupServiceImpl implements GroupService {
 //        return new DataRet<>(JacksonUtil.toJSON(map));
     }
 
+    /**
+     * 拼团回调
+     *
+     * @param unifiedOrderNotifyRequestData
+     * @return
+     */
     @Override
     public DataRet callBack(UnifiedOrderNotifyRequestData unifiedOrderNotifyRequestData) {
         DataRet orderRet = orderClient.findOrderByOrderNo(unifiedOrderNotifyRequestData.getOut_trade_no());
