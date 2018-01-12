@@ -15,10 +15,9 @@ public interface PayService {
      * 统一下单
      *
      * @param unifiedRequestData
-     * @param ipAddress
      * @return
      */
-    DataRet<Object> unifiedOrder(UnifiedRequestData unifiedRequestData, String ipAddress);
+    DataRet<Object> unifiedOrder(UnifiedRequestData unifiedRequestData);
 
     /**
      * 重新支付

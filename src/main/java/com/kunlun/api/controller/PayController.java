@@ -38,12 +38,9 @@ public class PayController {
      * @return
      */
     @PostMapping("/order/unifiedOrder")
-    public DataRet<Object> unifiedOrder(@RequestBody UnifiedRequestData unifiedRequestData,
-                                        HttpServletRequest request) {
+    public DataRet<Object> unifiedOrder(@RequestBody UnifiedRequestData unifiedRequestData) {
 
-        String ipAddress = IpUtil.getIPAddress(request);
-
-        return payService.unifiedOrder(unifiedRequestData, ipAddress);
+        return payService.unifiedOrder(unifiedRequestData);
     }
 
     /**

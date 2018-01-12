@@ -48,11 +48,10 @@ public class PayServiceImpl implements PayService {
      * 统一下单
      *
      * @param unifiedRequestData
-     * @param ipAddress
      * @return
      */
     @Override
-    public DataRet<Object> unifiedOrder(UnifiedRequestData unifiedRequestData, String ipAddress) {
+    public DataRet<Object> unifiedOrder(UnifiedRequestData unifiedRequestData) {
 //        String openId = WxUtil.getOpenId(unifiedRequestData.getWxCode());
         //积分校验
         Integer pointValue = unifiedRequestData.getPoint();
@@ -108,7 +107,7 @@ public class PayServiceImpl implements PayService {
         }
 
         //生成订单日志
-        OrderLog orderLog = CommonUtil.constructOrderLog(postOreder.getOrderNo(), "生成预付款订单", ipAddress, postOreder.getId());
+        OrderLog orderLog = CommonUtil.constructOrderLog(postOreder.getOrderNo(), "生成预付款订单", unifiedRequestData.getIpAddress(), postOreder.getId());
         DataRet<String> logRet = logClient.addOrderLog(orderLog);
         if (!logRet.isSuccess()) {
             return new DataRet<>("ERROR", logRet.getMessage());
