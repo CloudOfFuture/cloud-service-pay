@@ -233,6 +233,9 @@ public class PayServiceImpl implements PayService {
             //创建商品库存扣减日志
             GoodLog goodLog = CommonUtil.constructGoodLog(order.getGoodId(), order.getGoodName(), "库存扣减" + order.getCount());
             DataRet<String> goodLogRet = logClient.addGoodLog(goodLog);
+            if (!goodLogRet.isSuccess()) {
+                return new DataRet<>("ERROR", goodLogRet.getMessage());
+            }
 
             //积分扣减
             DataRet<String> pointRet = pointClient.updatePoint(order.getOperatePoint(), order.getUserId());
@@ -247,10 +250,15 @@ public class PayServiceImpl implements PayService {
             //积分扣减日志构建
             PointLog pointLog = CommonUtil.constructPointLog(order.getUserId(), order.getOperatePoint(), currentPointRet.getBody().getPoint());
             DataRet<String> pointLogRet = logClient.addPointLog(pointLog);
+            if (!pointLogRet.isSuccess()) {
+                return new DataRet<>("ERROR", pointLogRet.getMessage());
+            }
+            DataRet<String> goodDataRet = goodClient.updateSaleVolume(order.getCount(), order.getGoodId());
+            if (!goodDataRet.isSuccess()) {
+                return new DataRet<>("ERROR", goodDataRet.getMessage());
+            }
         }
-//        TODO:
-        //校验
-        return null;
+        return new DataRet<>("支付回调成功");
     }
 
     /**
